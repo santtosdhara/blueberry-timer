@@ -25,9 +25,7 @@ struct HomeView: View {
             }
             .navigationTitle("Blueberry Timer")
             .navigationDestination(for: TimerMode.self) { mode in
-                Text("\(mode.rawValue) Config")
-                    .font(.title)
-                    .padding()
+                ModeConfigView(mode: mode)
             }
         }
     }

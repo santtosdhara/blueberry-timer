@@ -20,27 +20,12 @@ final class TimerEngine: TimerEngineProtocol {
     
     func start() {
         guard !state.isFinished else { return }
-        
-        state = TimerState(
-            mode: state.mode,
-            phase: .running,
-            totalSeconds: state.totalSeconds,
-            remainingSeconds: state.remainingSeconds,
-            currentRound: state.currentRound,
-            totalRounds: state.totalRounds
-        )
+        updateState(phase: .running)
     }
     
     func pause() {
-        guard !state.isFinished else { return }
-        
-        state = TimerState(
-            mode: state.mode,
-            phase: .paused,
-            totalSeconds: state.totalSeconds,
-            remainingSeconds: state.remainingSeconds,
-            currentRound: state.currentRound,
-            totalRounds: state.totalRounds)
+        guard state.isRunning else { return }
+        updateState(phase: .paused)
     }
     
     func reset() {
@@ -55,18 +40,19 @@ final class TimerEngine: TimerEngineProtocol {
             finish()
             return
         }
-        
-        let newRemaining = state.remainingSeconds - 1
-        
-        state = TimerState(
-            mode: state.mode,
-            phase: .running,
-            totalSeconds: state.totalSeconds,
-            remainingSeconds: newRemaining,
-            currentRound: state.currentRound,
-            totalRounds: state.totalRounds
+
+        let newTotalRemaining = state.remainingSeconds - 1
+
+        var newIntervalRemaining = state.intervalRemainingSeconds
+        if state.mode == .emom, let current = state.intervalRemainingSeconds {
+            newIntervalRemaining = max(0, current - 1)
+        }
+
+        updateState(
+            remainingSeconds: newTotalRemaining,
+            intervalRemainingSeconds: newIntervalRemaining
         )
-        
+
         handleModeSpecificLogic()
     }
 }
@@ -81,7 +67,9 @@ private extension TimerEngine {
             totalSeconds: state.totalSeconds,
             remainingSeconds: 0,
             currentRound: state.currentRound,
-            totalRounds: state.totalRounds
+            totalRounds: state.totalRounds,
+            intervalSeconds: state.intervalSeconds,
+            intervalRemainingSeconds: 0
         )
     }
     
@@ -95,20 +83,40 @@ private extension TimerEngine {
     }
     
     func handleEMOM() {
-        guard let interval = config.intervalSeconds, interval > 0 else { return }
-        
-        let elapsed = state.totalSeconds - state.remainingSeconds
-        let newRound = max(1, (elapsed / interval) + 1)
-        
-        guard newRound != state.currentRound else { return }
-        
+        guard let interval = state.intervalSeconds,
+              let intervalRemaining = state.intervalRemainingSeconds,
+              let totalRounds = state.totalRounds else { return }
+
+        // When interval hits 0, move to next round or finish
+        if intervalRemaining == 0 {
+            if state.currentRound >= totalRounds {
+                finish()
+                return
+            }
+
+            // Next round starts with interval reset
+            updateState(
+                currentRound: state.currentRound + 1,
+                intervalRemainingSeconds: interval
+            )
+        }
+    }
+    
+    func updateState(
+        phase: TimerPhase? = nil,
+        remainingSeconds: Int? = nil,
+        currentRound: Int? = nil,
+        intervalRemainingSeconds: Int? = nil
+    ) {
         state = TimerState(
             mode: state.mode,
-            phase: state.phase,
+            phase: phase ?? state.phase,
             totalSeconds: state.totalSeconds,
-            remainingSeconds: state.remainingSeconds,
-            currentRound: newRound,
-            totalRounds: state.totalRounds
+            remainingSeconds: remainingSeconds ?? state.remainingSeconds,
+            currentRound: currentRound ?? state.currentRound,
+            totalRounds: state.totalRounds,
+            intervalSeconds: state.intervalSeconds,
+            intervalRemainingSeconds: intervalRemainingSeconds ?? state.intervalRemainingSeconds
         )
     }
 }
