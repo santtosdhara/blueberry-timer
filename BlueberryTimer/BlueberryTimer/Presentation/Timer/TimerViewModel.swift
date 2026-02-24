@@ -8,6 +8,12 @@
 import Foundation
 import Observation
 
+/// Presentation-layer orchestrator.
+/// Responsibility:
+/// - Start/stop the Ticker (side effect)
+/// - Delegate business rules to the Domain TimerEngine
+/// - Expose TimerState to SwiftUI as a single source of truth
+
 @Observable
 final class TimerViewModel {
     

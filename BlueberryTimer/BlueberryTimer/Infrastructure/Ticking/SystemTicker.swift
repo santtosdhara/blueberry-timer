@@ -7,6 +7,9 @@
 
 import Foundation
 
+/// Production ticker backed by Foundation.Timer.
+/// - Note: This is kept in Infrastructure (not Domain) because it is a side effect / scheduling mechanism.
+
 final class SystemTicker: Ticker {
     private var timer: Timer?
     
@@ -17,6 +20,7 @@ final class SystemTicker: Ticker {
         }
         RunLoop.main.add(timer!, forMode: .common)
     }
+    
     func stop() {
         timer?.invalidate()
         timer = nil

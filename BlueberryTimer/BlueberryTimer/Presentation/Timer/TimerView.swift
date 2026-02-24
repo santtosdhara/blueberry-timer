@@ -16,6 +16,7 @@ struct TimerView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
 
+            // EMOM displays per-interval countdown; other modes display total remaining time.
             let displaySeconds = viewModel.state.intervalRemainingSeconds ?? viewModel.state.remainingSeconds
             TimeDisplay(remainingSeconds: displaySeconds)
 
