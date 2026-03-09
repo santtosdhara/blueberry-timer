@@ -7,6 +7,15 @@
 
 import Foundation
 
+/// Domain timer engine.
+/// Responsibility:
+/// - Own all business rules (round transitions, finish conditions, per-mode behavior).
+/// - Remain UI-agnostic (no SwiftUI, no Timer/Combine scheduling).
+///
+/// Design:
+/// - Time is injected/external: a Ticker calls `tick()` every second.
+/// - State is modeled as a value type (TimerState) for predictability and testability.
+
 final class TimerEngine: TimerEngineProtocol {
     //MARK: Properties
     
@@ -20,27 +29,12 @@ final class TimerEngine: TimerEngineProtocol {
     
     func start() {
         guard !state.isFinished else { return }
-        
-        state = TimerState(
-            mode: state.mode,
-            phase: .running,
-            totalSeconds: state.totalSeconds,
-            remainingSeconds: state.remainingSeconds,
-            currentRound: state.currentRound,
-            totalRounds: state.totalRounds
-        )
+        updateState(phase: .running)
     }
     
     func pause() {
-        guard !state.isFinished else { return }
-        
-        state = TimerState(
-            mode: state.mode,
-            phase: .paused,
-            totalSeconds: state.totalSeconds,
-            remainingSeconds: state.remainingSeconds,
-            currentRound: state.currentRound,
-            totalRounds: state.totalRounds)
+        guard state.isRunning else { return }
+        updateState(phase: .paused)
     }
     
     func reset() {
@@ -50,23 +44,28 @@ final class TimerEngine: TimerEngineProtocol {
     // MARK: - Tick
     
     func tick() {
+        // Engine advances only when running; it is deterministic and driven by external ticks.
         guard state.isRunning else { return }
         guard state.remainingSeconds > 0 else {
             finish()
             return
         }
+
+        let newTotalRemaining = state.remainingSeconds - 1
         
-        let newRemaining = state.remainingSeconds - 1
-        
-        state = TimerState(
-            mode: state.mode,
-            phase: .running,
-            totalSeconds: state.totalSeconds,
-            remainingSeconds: newRemaining,
-            currentRound: state.currentRound,
-            totalRounds: state.totalRounds
+        // Mode-specific countdown (EMOM shows interval countdown instead of total countdown).
+        var newIntervalRemaining = state.intervalRemainingSeconds
+        if state.mode == .emom, let current = state.intervalRemainingSeconds {
+            newIntervalRemaining = max(0, current - 1)
+        }
+
+        // Centralized update keeps TimerState construction consistent as fields evolve.
+        updateState(
+            remainingSeconds: newTotalRemaining,
+            intervalRemainingSeconds: newIntervalRemaining
         )
-        
+
+        // Allow each mode to react to a tick (round transitions, phase changes, etc.).
         handleModeSpecificLogic()
     }
 }
@@ -81,7 +80,9 @@ private extension TimerEngine {
             totalSeconds: state.totalSeconds,
             remainingSeconds: 0,
             currentRound: state.currentRound,
-            totalRounds: state.totalRounds
+            totalRounds: state.totalRounds,
+            intervalSeconds: state.intervalSeconds,
+            intervalRemainingSeconds: 0
         )
     }
     
@@ -95,20 +96,49 @@ private extension TimerEngine {
     }
     
     func handleEMOM() {
-        guard let interval = config.intervalSeconds, interval > 0 else { return }
+        // EMOM rule: show per-interval countdown and repeat it for N rounds.
+        // When the interval reaches 0:
+        // - If last round: finish
+        // - Else: increment round and reset interval countdown back to full interval seconds
         
-        let elapsed = state.totalSeconds - state.remainingSeconds
-        let newRound = max(1, (elapsed / interval) + 1)
+        guard let interval = state.intervalSeconds,
+              let intervalRemaining = state.intervalRemainingSeconds,
+              let totalRounds = state.totalRounds else { return }
         
-        guard newRound != state.currentRound else { return }
-        
+        // When interval hits 0, move to next round or finish
+        if intervalRemaining == 0 {
+            if state.currentRound >= totalRounds {
+                finish()
+                return
+            }
+            
+            // Next round starts with interval reset
+            updateState(
+                currentRound: state.currentRound + 1,
+                intervalRemainingSeconds: interval
+            )
+        }
+    }
+    
+    /// Centralized state mutation helper.
+    /// - Why: Avoids repeating full TimerState construction in multiple methods.
+    /// - Benefit: When we add fields for AMRAP/Tabata later, we update state safely in one place.
+    
+    func updateState(
+        phase: TimerPhase? = nil,
+        remainingSeconds: Int? = nil,
+        currentRound: Int? = nil,
+        intervalRemainingSeconds: Int? = nil
+    ) {
         state = TimerState(
             mode: state.mode,
-            phase: state.phase,
+            phase: phase ?? state.phase,
             totalSeconds: state.totalSeconds,
-            remainingSeconds: state.remainingSeconds,
-            currentRound: newRound,
-            totalRounds: state.totalRounds
+            remainingSeconds: remainingSeconds ?? state.remainingSeconds,
+            currentRound: currentRound ?? state.currentRound,
+            totalRounds: state.totalRounds,
+            intervalSeconds: state.intervalSeconds,
+            intervalRemainingSeconds: intervalRemainingSeconds ?? state.intervalRemainingSeconds
         )
     }
 }

@@ -19,14 +19,17 @@ struct TimerConfig: Equatable {
     let restSeconds: Int?
     let rounds: Int?
     
-    static func emom(totalMinutes: Int, intervalSeconds: Int = 60) -> TimerConfig {
-        TimerConfig(
+    static func emom(intervalMinutes: Int = 1, rounds: Int = 10) -> TimerConfig {
+        let intervalSeconds = max(1, intervalMinutes) * 60
+        let r = max(1, rounds)
+        
+        return TimerConfig(
             mode: .emom,
-            totalSeconds: max(0, totalMinutes) * 60,
-            intervalSeconds: max(1, intervalSeconds),
+            totalSeconds:intervalSeconds * r,
+            intervalSeconds: intervalSeconds,
             workSeconds: nil,
             restSeconds: nil,
-            rounds: nil
+            rounds: r
         )
     }
     
