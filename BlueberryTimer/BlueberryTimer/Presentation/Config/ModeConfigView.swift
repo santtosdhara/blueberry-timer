@@ -14,7 +14,9 @@ struct ModeConfigView: View {
         switch mode {
         case .emom:
             EMOMConfigView()
-        case .amrap, .forTime, .tabata:
+        case .amrap:
+            AMRAPConfigView()
+        case .forTime, .tabata:
             Text("\(mode.rawValue) coming soon")
                 .font(.title3)
                 .foregroundStyle(.secondary)
