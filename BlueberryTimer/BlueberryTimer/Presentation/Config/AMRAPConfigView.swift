@@ -22,7 +22,9 @@ struct AMRAPConfigView: View {
                     .multilineTextAlignment(.center)
             }
             Section {
+                //this navigation link is the action
                 NavigationLink {
+                    //Here is where I give some useful information to the Timer be created.
                     let config = TimerConfig.amrap(totalMinutes: max(1, totalMinutes))
                     let engine = TimerEngine(config: config)
                     let ticker = SystemTicker()
