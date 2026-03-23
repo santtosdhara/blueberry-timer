@@ -9,6 +9,22 @@ import SwiftUI
 
 struct TimerView: View {
     @State var viewModel: TimerViewModel
+    
+    // Displayed time varies by mode:
+    // - EMOM shows interval countdown
+    // - For Time shows elapsed time
+    // - AMRAP/Tabata show remaining time
+    
+    private var displaySeconds: Int {
+        switch viewModel.state.mode {
+        case .emom:
+            return viewModel.state.intervalRemainingSeconds ?? viewModel.state.remainingSeconds
+        case .forTime:
+            return viewModel.state.totalSeconds - viewModel.state.remainingSeconds
+        case .amrap, .tabata:
+            return viewModel.state.remainingSeconds
+        }
+    }
 
     var body: some View {
         VStack(spacing: 36) {
@@ -16,8 +32,6 @@ struct TimerView: View {
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            // EMOM displays per-interval countdown; other modes display total remaining time.
-            let displaySeconds = viewModel.state.intervalRemainingSeconds ?? viewModel.state.remainingSeconds
             TimeDisplay(remainingSeconds: displaySeconds)
 
             if let totalRounds = viewModel.state.totalRounds, totalRounds > 0 {

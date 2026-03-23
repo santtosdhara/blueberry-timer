@@ -20,7 +20,23 @@ struct ForTimeConfigView: View {
                     .keyboardType(.numberPad)
                     .multilineTextAlignment(.center)
             }
+            Section {
+                NavigationLink {
+                    let config = TimerConfig.forTime(totalMinutes: max(1, totalMinutes))
+                    let engine = TimerEngine(config: config)
+                    let ticker = SystemTicker()
+                    
+                    TimerView(viewModel: TimerViewModel(
+                        engine: engine,
+                            ticker: ticker)
+                    )
+                } label: {
+                    Text("Start ForTime Workout")
+                        .fontWeight(.bold)
+                }
+            }
         }
+        .navigationTitle("ForTime setup")
     }
 }
 

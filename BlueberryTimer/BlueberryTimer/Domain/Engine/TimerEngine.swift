@@ -130,6 +130,10 @@ private extension TimerEngine {
         
     }
     
+    func handleForTime() {
+        
+    }
+    
     /// Centralized state mutation helper.
     /// - Why: Avoids repeating full TimerState construction in multiple methods.
     /// - Benefit: When we add fields for AMRAP/Tabata later, we update state safely in one place.
