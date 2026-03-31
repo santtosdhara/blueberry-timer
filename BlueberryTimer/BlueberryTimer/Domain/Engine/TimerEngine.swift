@@ -90,7 +90,9 @@ private extension TimerEngine {
         switch config.mode {
         case .emom:
             handleEMOM()
-        case .amrap, .forTime, .tabata:
+        case .amrap:
+            handleAMRAP()
+        case .forTime, .tabata:
             break // implemented later
         }
     }
@@ -118,6 +120,18 @@ private extension TimerEngine {
                 intervalRemainingSeconds: interval
             )
         }
+    }
+    
+    func handleAMRAP() {
+        // AMRAP uses a continuous countdown.
+        // No Inteval resets or automatic round transition
+        // Completion is handled by the main tick() flow when remainingSecods reaches 0.
+        
+        
+    }
+    
+    func handleForTime() {
+        
     }
     
     /// Centralized state mutation helper.

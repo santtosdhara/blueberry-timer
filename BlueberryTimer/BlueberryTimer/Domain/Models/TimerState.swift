@@ -20,7 +20,6 @@ struct TimerState: Equatable {
     
     let intervalSeconds: Int?
     let intervalRemainingSeconds: Int?
-    
     var isRunning: Bool { phase == .running || phase == .work || phase == .rest }
     var isPaused: Bool { phase == .paused }
     var isFinished: Bool { phase == .finished }

@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "icon-ios-1024x1024.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -12,6 +13,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "icon-watchos-1024x1024.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,6 +27,128 @@
       ],
       "idiom" : "universal",
       "platform" : "ios",
+      "size" : "1024x1024"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "20x20"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "20x20"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "1x",
+      "size" : "29x29"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "29x29"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "29x29"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "40x40"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "40x40"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "2x",
+      "size" : "60x60"
+    },
+    {
+      "idiom" : "iphone",
+      "scale" : "3x",
+      "size" : "60x60"
+    },
+    {
+      "idiom" : "ios-marketing",
+      "scale" : "1x",
+      "size" : "1024x1024"
+    },
+    {
+      "filename" : "icon_20.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "20x20"
+    },
+    {
+      "filename" : "icon_40.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "40x40"
+    },
+    {
+      "filename" : "icon_58.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "58x58"
+    },
+    {
+      "filename" : "icon_60.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "60x60"
+    },
+    {
+      "filename" : "icon_76.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "76x76"
+    },
+    {
+      "filename" : "icon_80.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "80x80"
+    },
+    {
+      "filename" : "icon_87.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "87x87"
+    },
+    {
+      "filename" : "icon_120.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "120x120"
+    },
+    {
+      "filename" : "icon_152.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "152x152"
+    },
+    {
+      "filename" : "icon_167.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "167x167"
+    },
+    {
+      "filename" : "icon_180.png",
+      "idiom" : "universal",
+      "scale" : "1x",
+      "size" : "180x180"
+    },
+    {
+      "filename" : "icon_1024.png",
+      "idiom" : "universal",
+      "scale" : "1x",
       "size" : "1024x1024"
     }
   ],
