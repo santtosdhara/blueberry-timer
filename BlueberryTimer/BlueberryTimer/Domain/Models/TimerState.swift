@@ -69,13 +69,13 @@ struct TimerState: Equatable {
                    let rounds = max(1, config.rounds ?? 8)
                    return TimerState(
                        mode: .tabata,
-                       phase: .idle,
+                       phase: .work,
                        totalSeconds: config.totalSeconds,
                        remainingSeconds: config.totalSeconds,
                        currentRound: 1,
                        totalRounds: rounds,
                        intervalSeconds: nil,
-                       intervalRemainingSeconds: nil
+                       intervalRemainingSeconds: config.workSeconds
                    )
         }
     }

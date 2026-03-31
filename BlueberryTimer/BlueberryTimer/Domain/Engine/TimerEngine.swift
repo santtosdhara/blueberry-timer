@@ -51,17 +51,16 @@ final class TimerEngine: TimerEngineProtocol {
             return
         }
 
-        let newTotalRemaining = state.remainingSeconds - 1
-        
-        // Mode-specific countdown (EMOM shows interval countdown instead of total countdown).
         var newIntervalRemaining = state.intervalRemainingSeconds
-        if state.mode == .emom, let current = state.intervalRemainingSeconds {
+
+        if (state.mode == .emom || state.mode == .tabata),
+           let current = state.intervalRemainingSeconds {
             newIntervalRemaining = max(0, current - 1)
         }
 
         // Centralized update keeps TimerState construction consistent as fields evolve.
         updateState(
-            remainingSeconds: newTotalRemaining,
+           // remainingSeconds: newTotalRemaining,
             intervalRemainingSeconds: newIntervalRemaining
         )
 
@@ -90,7 +89,12 @@ private extension TimerEngine {
         switch config.mode {
         case .emom:
             handleEMOM()
-        case .amrap, .forTime, .tabata:
+        case .amrap:
+            handleAMRAP()
+        case .forTime:
+            handleForTime()
+        case .tabata:
+            handleTabata()
             break // implemented later
         }
     }
@@ -120,6 +124,42 @@ private extension TimerEngine {
         }
     }
     
+
+    func handleTabata() {
+        guard let phaseRemaining = state.intervalRemainingSeconds,
+              let totalRounds = state.totalRounds,
+              let workSeconds = config.workSeconds,
+              let restSeconds = config.restSeconds else { return }
+        
+        if phaseRemaining == 0 {
+            switch state.phase {
+            case .work:
+                updateState(phase: .rest, intervalRemainingSeconds: restSeconds)
+            case .rest:
+                if state.currentRound >= totalRounds {
+                    finish()
+                } else {
+                    updateState(phase: .work, currentRound: state.currentRound + 1, intervalRemainingSeconds: workSeconds)
+                }
+            default:
+                break
+                
+            }
+        }
+        
+    }
+    
+    func handleAMRAP() {
+        // AMRAP uses a continuous countdown.
+        // No Inteval resets or automatic round transition
+        // Completion is handled by the main tick() flow when remainingSecods reaches 0.
+        
+        
+    }
+    
+    func handleForTime() {
+        
+    }
     /// Centralized state mutation helper.
     /// - Why: Avoids repeating full TimerState construction in multiple methods.
     /// - Benefit: When we add fields for AMRAP/Tabata later, we update state safely in one place.
