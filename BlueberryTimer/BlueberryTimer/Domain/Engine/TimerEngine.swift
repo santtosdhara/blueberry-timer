@@ -95,7 +95,6 @@ private extension TimerEngine {
             handleForTime()
         case .tabata:
             handleTabata()
-            break // implemented later
         }
     }
     
@@ -123,7 +122,6 @@ private extension TimerEngine {
             )
         }
     }
-    
 
     func handleTabata() {
         guard let phaseRemaining = state.intervalRemainingSeconds,

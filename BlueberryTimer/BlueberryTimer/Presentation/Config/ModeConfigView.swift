@@ -14,13 +14,13 @@ struct ModeConfigView: View {
         switch mode {
         case .emom:
             EMOMConfigView()
-
         case .amrap:
             AMRAPConfigView()
         case .forTime:
             ForTimeConfigView()
         case .tabata:
             TabataConfigView()
+
         }
     }
 }
