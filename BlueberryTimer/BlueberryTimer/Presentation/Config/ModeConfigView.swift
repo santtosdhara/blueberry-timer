@@ -20,7 +20,6 @@ struct ModeConfigView: View {
             ForTimeConfigView()
         case .tabata:
             TabataConfigView()
-
         }
     }
 }
