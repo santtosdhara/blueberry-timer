@@ -81,7 +81,8 @@ private extension TimerEngine {
             currentRound: state.currentRound,
             totalRounds: state.totalRounds,
             intervalSeconds: state.intervalSeconds,
-            intervalRemainingSeconds: 0
+            intervalRemainingSeconds: 0,
+            tabataPhase: state.tabataPhase
         )
     }
     
@@ -123,28 +124,33 @@ private extension TimerEngine {
         }
     }
 
-    func handleTabata() {
+     func handleTabata() {
         guard let phaseRemaining = state.intervalRemainingSeconds,
               let totalRounds = state.totalRounds,
               let workSeconds = config.workSeconds,
-              let restSeconds = config.restSeconds else { return }
-        
+              let restSeconds = config.restSeconds,
+              let tabataPhase = state.tabataPhase else { return }
+
         if phaseRemaining == 0 {
-            switch state.phase {
+            switch tabataPhase {
             case .work:
-                updateState(phase: .rest, intervalRemainingSeconds: restSeconds)
+                updateState(
+                    intervalRemainingSeconds: restSeconds,
+                    tabataPhase: .rest
+                )
+
             case .rest:
                 if state.currentRound >= totalRounds {
                     finish()
                 } else {
-                    updateState(phase: .work, currentRound: state.currentRound + 1, intervalRemainingSeconds: workSeconds)
+                    updateState(
+                        currentRound: state.currentRound + 1,
+                        intervalRemainingSeconds: workSeconds,
+                        tabataPhase: .work
+                    )
                 }
-            default:
-                break
-                
             }
         }
-        
     }
     
     func handleAMRAP() {
@@ -166,7 +172,8 @@ private extension TimerEngine {
         phase: TimerPhase? = nil,
         remainingSeconds: Int? = nil,
         currentRound: Int? = nil,
-        intervalRemainingSeconds: Int? = nil
+        intervalRemainingSeconds: Int? = nil,
+        tabataPhase: TabataPhase? = nil
     ) {
         state = TimerState(
             mode: state.mode,
@@ -176,7 +183,8 @@ private extension TimerEngine {
             currentRound: currentRound ?? state.currentRound,
             totalRounds: state.totalRounds,
             intervalSeconds: state.intervalSeconds,
-            intervalRemainingSeconds: intervalRemainingSeconds ?? state.intervalRemainingSeconds
+            intervalRemainingSeconds: intervalRemainingSeconds ?? state.intervalRemainingSeconds,
+            tabataPhase: tabataPhase ?? state.tabataPhase
         )
     }
 }

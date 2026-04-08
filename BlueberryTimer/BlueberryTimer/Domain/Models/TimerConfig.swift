@@ -63,7 +63,7 @@ struct TimerConfig: Equatable {
             mode: .tabata,
             totalSeconds: (work + rest) * roundsNumber,
             intervalSeconds: nil,
-            workSeconds: work,
+            workSeconds: work, 
             restSeconds: rest,
             rounds: roundsNumber
         )
