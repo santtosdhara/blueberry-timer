@@ -58,11 +58,19 @@ final class TimerEngine: TimerEngineProtocol {
             newIntervalRemaining = max(0, current - 1)
         }
 
+        let newRemaining = state.remainingSeconds - 1
+
         // Centralized update keeps TimerState construction consistent as fields evolve.
         updateState(
-           // remainingSeconds: newTotalRemaining,
+            remainingSeconds: newRemaining,
             intervalRemainingSeconds: newIntervalRemaining
         )
+
+        // If we just hit zero, finish immediately — don't wait for the next tick.
+        if newRemaining == 0 {
+            finish()
+            return
+        }
 
         // Allow each mode to react to a tick (round transitions, phase changes, etc.).
         handleModeSpecificLogic()
