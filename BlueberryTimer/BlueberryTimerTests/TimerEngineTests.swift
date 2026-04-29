@@ -8,6 +8,8 @@
 import XCTest
 @testable import BlueberryTimer
 
+
+@MainActor
 final class TimerEngineTests: XCTestCase {
 
     //Very descriptive name
