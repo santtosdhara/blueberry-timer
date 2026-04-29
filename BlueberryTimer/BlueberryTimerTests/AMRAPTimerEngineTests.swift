@@ -7,6 +7,7 @@
 import XCTest
 @testable import BlueberryTimer
 
+@MainActor
 final class AMRAPTimerEngineTests: XCTestCase {
 
     // ─────────────────────────────────────────
