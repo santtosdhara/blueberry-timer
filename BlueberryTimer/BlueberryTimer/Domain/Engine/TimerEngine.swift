@@ -51,19 +51,26 @@ final class TimerEngine: TimerEngineProtocol {
             return
         }
 
-        let newTotalRemaining = state.remainingSeconds - 1
-        
-        // Mode-specific countdown (EMOM shows interval countdown instead of total countdown).
         var newIntervalRemaining = state.intervalRemainingSeconds
-        if state.mode == .emom, let current = state.intervalRemainingSeconds {
+
+        if (state.mode == .emom || state.mode == .tabata),
+           let current = state.intervalRemainingSeconds {
             newIntervalRemaining = max(0, current - 1)
         }
 
+        let newRemaining = state.remainingSeconds - 1
+
         // Centralized update keeps TimerState construction consistent as fields evolve.
         updateState(
-            remainingSeconds: newTotalRemaining,
+            remainingSeconds: newRemaining,
             intervalRemainingSeconds: newIntervalRemaining
         )
+
+        // If we just hit zero, finish immediately — don't wait for the next tick.
+        if newRemaining == 0 {
+            finish()
+            return
+        }
 
         // Allow each mode to react to a tick (round transitions, phase changes, etc.).
         handleModeSpecificLogic()
@@ -82,7 +89,8 @@ private extension TimerEngine {
             currentRound: state.currentRound,
             totalRounds: state.totalRounds,
             intervalSeconds: state.intervalSeconds,
-            intervalRemainingSeconds: 0
+            intervalRemainingSeconds: 0,
+            tabataPhase: state.tabataPhase
         )
     }
     
@@ -92,8 +100,10 @@ private extension TimerEngine {
             handleEMOM()
         case .amrap:
             handleAMRAP()
-        case .forTime, .tabata:
-            break // implemented later
+        case .forTime:
+            handleForTime()
+        case .tabata:
+            handleTabata()
         }
     }
     
@@ -121,6 +131,35 @@ private extension TimerEngine {
             )
         }
     }
+
+     func handleTabata() {
+        guard let phaseRemaining = state.intervalRemainingSeconds,
+              let totalRounds = state.totalRounds,
+              let workSeconds = config.workSeconds,
+              let restSeconds = config.restSeconds,
+              let tabataPhase = state.tabataPhase else { return }
+
+        if phaseRemaining == 0 {
+            switch tabataPhase {
+            case .work:
+                updateState(
+                    intervalRemainingSeconds: restSeconds,
+                    tabataPhase: .rest
+                )
+
+            case .rest:
+                if state.currentRound >= totalRounds {
+                    finish()
+                } else {
+                    updateState(
+                        currentRound: state.currentRound + 1,
+                        intervalRemainingSeconds: workSeconds,
+                        tabataPhase: .work
+                    )
+                }
+            }
+        }
+    }
     
     func handleAMRAP() {
         // AMRAP uses a continuous countdown.
@@ -133,7 +172,6 @@ private extension TimerEngine {
     func handleForTime() {
         
     }
-    
     /// Centralized state mutation helper.
     /// - Why: Avoids repeating full TimerState construction in multiple methods.
     /// - Benefit: When we add fields for AMRAP/Tabata later, we update state safely in one place.
@@ -142,7 +180,8 @@ private extension TimerEngine {
         phase: TimerPhase? = nil,
         remainingSeconds: Int? = nil,
         currentRound: Int? = nil,
-        intervalRemainingSeconds: Int? = nil
+        intervalRemainingSeconds: Int? = nil,
+        tabataPhase: TabataPhase? = nil
     ) {
         state = TimerState(
             mode: state.mode,
@@ -152,7 +191,8 @@ private extension TimerEngine {
             currentRound: currentRound ?? state.currentRound,
             totalRounds: state.totalRounds,
             intervalSeconds: state.intervalSeconds,
-            intervalRemainingSeconds: intervalRemainingSeconds ?? state.intervalRemainingSeconds
+            intervalRemainingSeconds: intervalRemainingSeconds ?? state.intervalRemainingSeconds,
+            tabataPhase: tabataPhase ?? state.tabataPhase
         )
     }
 }

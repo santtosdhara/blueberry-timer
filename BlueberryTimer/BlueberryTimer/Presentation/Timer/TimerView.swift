@@ -19,9 +19,11 @@ struct TimerView: View {
         switch viewModel.state.mode {
         case .emom:
             return viewModel.state.intervalRemainingSeconds ?? viewModel.state.remainingSeconds
+        case .tabata:
+            return viewModel.state.intervalRemainingSeconds ?? viewModel.state.remainingSeconds
         case .forTime:
             return viewModel.state.totalSeconds - viewModel.state.remainingSeconds
-        case .amrap, .tabata:
+        case .amrap:
             return viewModel.state.remainingSeconds
         }
     }
@@ -31,6 +33,8 @@ struct TimerView: View {
             Text(viewModel.state.mode.rawValue)
                 .font(.title2)
                 .fontWeight(.semibold)
+            
+    
 
             TimeDisplay(remainingSeconds: displaySeconds)
 
@@ -43,6 +47,7 @@ struct TimerView: View {
                 if viewModel.state.isRunning {
                     Button("Pause") { viewModel.pause() }
                         .buttonStyle(.borderedProminent)
+                    
                 } else if viewModel.state.isPaused {
                     Button("Resume") { viewModel.resume() }
                         .buttonStyle(.borderedProminent)

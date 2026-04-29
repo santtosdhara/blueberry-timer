@@ -10,20 +10,24 @@ import Foundation
 struct TimerState: Equatable {
     let mode: TimerMode
     let phase: TimerPhase
-    
+
     let totalSeconds: Int
     let remainingSeconds: Int
-    
-    //EMOM/ Tabata
+
+    // EMOM / Tabata
     let currentRound: Int
     let totalRounds: Int?
-    
+
     let intervalSeconds: Int?
     let intervalRemainingSeconds: Int?
-    var isRunning: Bool { phase == .running || phase == .work || phase == .rest }
+
+    // Tabata only
+    let tabataPhase: TabataPhase?
+
+    var isRunning: Bool { phase == .running }
     var isPaused: Bool { phase == .paused }
     var isFinished: Bool { phase == .finished }
-    
+
     static func initial(from config: TimerConfig) -> TimerState {
         switch config.mode {
         case .emom:
@@ -37,9 +41,10 @@ struct TimerState: Equatable {
                 currentRound: 1,
                 totalRounds: totalRounds,
                 intervalSeconds: interval,
-                intervalRemainingSeconds: interval
+                intervalRemainingSeconds: interval,
+                tabataPhase: nil
             )
-            
+
         case .amrap:
             return TimerState(
                 mode: .amrap,
@@ -49,33 +54,36 @@ struct TimerState: Equatable {
                 currentRound: 0,
                 totalRounds: nil,
                 intervalSeconds: nil,
-                intervalRemainingSeconds: nil
+                intervalRemainingSeconds: nil,
+                tabataPhase: nil
             )
-            
-        case .forTime:
-                   return TimerState(
-                       mode: .forTime,
-                       phase: .idle,
-                       totalSeconds: config.totalSeconds,
-                       remainingSeconds: config.totalSeconds,
-                       currentRound: 0,
-                       totalRounds: nil,
-                       intervalSeconds: nil,
-                       intervalRemainingSeconds: nil
-                   )
 
-               case .tabata:
-                   let rounds = max(1, config.rounds ?? 8)
-                   return TimerState(
-                       mode: .tabata,
-                       phase: .idle,
-                       totalSeconds: config.totalSeconds,
-                       remainingSeconds: config.totalSeconds,
-                       currentRound: 1,
-                       totalRounds: rounds,
-                       intervalSeconds: nil,
-                       intervalRemainingSeconds: nil
-                   )
+        case .forTime:
+            return TimerState(
+                mode: .forTime,
+                phase: .idle,
+                totalSeconds: config.totalSeconds,
+                remainingSeconds: config.totalSeconds,
+                currentRound: 0,
+                totalRounds: nil,
+                intervalSeconds: nil,
+                intervalRemainingSeconds: nil,
+                tabataPhase: nil
+            )
+
+        case .tabata:
+            let rounds = max(1, config.rounds ?? 8)
+            return TimerState(
+                mode: .tabata,
+                phase: .idle,
+                totalSeconds: config.totalSeconds,
+                remainingSeconds: config.totalSeconds,
+                currentRound: 1,
+                totalRounds: rounds,
+                intervalSeconds: nil,
+                intervalRemainingSeconds: config.workSeconds,
+                tabataPhase: .work
+            )
         }
     }
 }

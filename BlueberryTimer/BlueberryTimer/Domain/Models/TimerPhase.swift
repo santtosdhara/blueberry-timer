@@ -12,8 +12,4 @@ enum TimerPhase: Equatable {
     case running
     case paused
     case finished
-    
-    //Mode-specific sub-phase used mainly on Tabata timer
-    case work
-    case rest
 }

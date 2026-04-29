@@ -6,8 +6,23 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5FB4373D2F7175C900E16B51 /* AsyncAlgorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 5FB4373C2F7175C900E16B51 /* AsyncAlgorithms */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5FB437462F71768F00E16B51 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F8756202F47A61E00A01812 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5F8756272F47A61E00A01812;
+			remoteInfo = BlueberryTimer;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		5F8756282F47A61E00A01812 /* BlueberryTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BlueberryTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FB437422F71768F00E16B51 /* BlueberryTimerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BlueberryTimerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +31,23 @@
 			path = BlueberryTimer;
 			sourceTree = "<group>";
 		};
+		5FB437432F71768F00E16B51 /* BlueberryTimerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BlueberryTimerTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		5F8756252F47A61E00A01812 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FB4373D2F7175C900E16B51 /* AsyncAlgorithms in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FB4373F2F71768F00E16B51 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +61,7 @@
 			isa = PBXGroup;
 			children = (
 				5F87562A2F47A61E00A01812 /* BlueberryTimer */,
+				5FB437432F71768F00E16B51 /* BlueberryTimerTests */,
 				5F8756292F47A61E00A01812 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				5F8756282F47A61E00A01812 /* BlueberryTimer.app */,
+				5FB437422F71768F00E16B51 /* BlueberryTimerTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -65,10 +95,34 @@
 			);
 			name = BlueberryTimer;
 			packageProductDependencies = (
+				5FB4373C2F7175C900E16B51 /* AsyncAlgorithms */,
 			);
 			productName = BlueberryTimer;
 			productReference = 5F8756282F47A61E00A01812 /* BlueberryTimer.app */;
 			productType = "com.apple.product-type.application";
+		};
+		5FB437412F71768F00E16B51 /* BlueberryTimerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5FB437482F71768F00E16B51 /* Build configuration list for PBXNativeTarget "BlueberryTimerTests" */;
+			buildPhases = (
+				5FB4373E2F71768F00E16B51 /* Sources */,
+				5FB4373F2F71768F00E16B51 /* Frameworks */,
+				5FB437402F71768F00E16B51 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5FB437472F71768F00E16B51 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5FB437432F71768F00E16B51 /* BlueberryTimerTests */,
+			);
+			name = BlueberryTimerTests;
+			packageProductDependencies = (
+			);
+			productName = BlueberryTimerTests;
+			productReference = 5FB437422F71768F00E16B51 /* BlueberryTimerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -83,6 +137,10 @@
 					5F8756272F47A61E00A01812 = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
+					5FB437412F71768F00E16B51 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 5F8756272F47A61E00A01812;
+					};
 				};
 			};
 			buildConfigurationList = 5F8756232F47A61E00A01812 /* Build configuration list for PBXProject "BlueberryTimer" */;
@@ -94,18 +152,29 @@
 			);
 			mainGroup = 5F87561F2F47A61E00A01812;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				5FB4373B2F7175C900E16B51 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 5F8756292F47A61E00A01812 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				5F8756272F47A61E00A01812 /* BlueberryTimer */,
+				5FB437412F71768F00E16B51 /* BlueberryTimerTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		5F8756262F47A61E00A01812 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5FB437402F71768F00E16B51 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +191,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5FB4373E2F71768F00E16B51 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5FB437472F71768F00E16B51 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5F8756272F47A61E00A01812 /* BlueberryTimer */;
+			targetProxy = 5FB437462F71768F00E16B51 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		5F8756312F47A61F00A01812 /* Debug */ = {
@@ -310,6 +394,48 @@
 			};
 			name = Release;
 		};
+		5FB437492F71768F00E16B51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9C5MNLDUGF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = santtosdhara.BlueberryTimerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlueberryTimer.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BlueberryTimer";
+			};
+			name = Debug;
+		};
+		5FB4374A2F71768F00E16B51 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9C5MNLDUGF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = santtosdhara.BlueberryTimerTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlueberryTimer.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BlueberryTimer";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -331,7 +457,35 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		5FB437482F71768F00E16B51 /* Build configuration list for PBXNativeTarget "BlueberryTimerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FB437492F71768F00E16B51 /* Debug */,
+				5FB4374A2F71768F00E16B51 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5FB4373B2F7175C900E16B51 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-async-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5FB4373C2F7175C900E16B51 /* AsyncAlgorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5FB4373B2F7175C900E16B51 /* XCRemoteSwiftPackageReference "swift-async-algorithms" */;
+			productName = AsyncAlgorithms;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5F8756202F47A61E00A01812 /* Project object */;
 }
